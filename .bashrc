@@ -156,6 +156,25 @@ PROMPT_COMMAND="__steamos_prompt_command '$PS1'${PROMPT_COMMAND:+; $PROMPT_COMMA
 
 # Custom Stuff (GJ)
 
+# aliases
+alias so="source ~/.bashrc"
+alias q="exit"
+alias c="clear"
+
+# aliases - tools
+alias ff="fastfetch"
+alias cf="c & ff"
+alias v="nvim"
+alias lg="lazygit"
+
+# aliases - screensavers
+alias cmatrix="cmatrix"
+alias cbonsai="cbonsai -li -L 64"
+alias nyancat="nyancat -n"
+
+# aliases - dotfiles
+alias nvimrc="cd ~/.config/nvim"
+
 # dotfiles setup
 DOTFILES_HOME=$HOME
 DOTFILES_GIT_DIR=.steamdeck_dotfiles 
@@ -163,3 +182,18 @@ alias dotfiles="git --git-dir=$DOTFILES_HOME/$DOTFILES_GIT_DIR/ --work-tree=$DOT
 
 # homebrew setup
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
+# Set up fzf key bindings and fuzzy completion
+eval "$(fzf --bash)"
+
+# Set up yazi - y shell wrapper
+function y() {
+    local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+    yazi "$@" --cwd-file="$tmp"
+    IFS= read -r -d '' cwd <"$tmp"
+    [ -n "$cwd" ] && [ "$cwd" != "$PWD" ] && builtin cd -- "$cwd"
+    rm -f -- "$tmp"
+}
+
+# Set up zoxide - z command and zi [i]nteractive command
+eval "$(zoxide init bash)"
